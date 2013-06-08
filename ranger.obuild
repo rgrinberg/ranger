@@ -1,0 +1,9 @@
+name: ranger
+version: 0.0.0
+synopsis: my new project
+obuild-ver: 1
+
+library ranger
+  modules: Ranger
+  src-dir: lib
+  c-dir: ./
