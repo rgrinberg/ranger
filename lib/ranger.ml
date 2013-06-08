@@ -51,3 +51,31 @@ let fold_left {start; stop; get} ~init ~f =
 
 let fold_right t ~f ~init =
   fold_left (reverse t) ~init ~f:(fun x y -> f y x)
+
+
+let drop ({start; stop; _ } as t) n =
+  if (start + n) > stop then invalid_arg "Ranger.drop: out of bounds"
+  else {t with start=(start+n)}
+
+let drop_while ({start; stop; get} as t) ~f =
+  let module S = struct exception Found of int end in
+  try
+    for i = start to stop do
+      if not (f (get i)) then raise (S.Found i)
+    done;
+    {start=stop;stop;get}
+  with S.Found start -> {t with start}
+
+let take ({start; stop; _} as t) n = 
+  if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
+  else {t with stop=(start+n)}
+
+let take_while ({start; stop; get} as t) ~f =
+  let module S = struct exception Found of int end in
+  try
+    for i = start to stop do
+      if not (f (get i)) then raise (S.Found (pred i))
+    done;
+    {start=stop;stop;get}
+  with S.Found stop -> {t with stop}
+

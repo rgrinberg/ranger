@@ -21,3 +21,11 @@ val reverse : 'a t -> 'a t
 val fold_left : 'a t -> init:'b -> f:('b -> 'a -> 'b) -> 'b
 
 val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init:'b -> 'b
+
+val drop : 'a t -> int -> 'a t
+
+val drop_while : 'a t -> f:('a -> bool) -> 'a t
+
+val take : 'a t -> int -> 'a t
+
+val take_while : 'a t -> f:('a -> bool) -> 'a t
