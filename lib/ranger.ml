@@ -8,6 +8,8 @@ type 'a t = {
 
 let create ?(start=0) ~stop get = { start; stop; get }
 
+let get {start; get; _} n = get (start + n)
+
 let of_array ?(start=0) ?stop arr = 
   let stop = match stop with
     | None -> Array.length arr - 1
@@ -32,6 +34,8 @@ let bounds {start; stop; _} = (start, stop)
 
 let length {start; stop; _} = stop - start + 1
 
+let is_empty {start; stop; _} = start >= stop
+
 let for_all {start; stop; get} ~f = 
   try for i = start to stop do
       if not (f (get i)) then
@@ -51,7 +55,6 @@ let fold_left {start; stop; get} ~init ~f =
 
 let fold_right t ~f ~init =
   fold_left (reverse t) ~init ~f:(fun x y -> f y x)
-
 
 let drop ({start; stop; _ } as t) n =
   if (start + n) > stop then invalid_arg "Ranger.drop: out of bounds"
@@ -78,4 +81,3 @@ let take_while ({start; stop; get} as t) ~f =
     done;
     {start=stop;stop;get}
   with S.Found stop -> {t with stop}
-

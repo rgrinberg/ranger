@@ -2,6 +2,8 @@ type 'a t
 
 val create : ?start:int -> stop:int -> (int -> 'a) -> 'a t
 
+val get : 'a t -> int -> 'a
+
 val of_array : ?start:int -> ?stop:int -> 'a array -> 'a t
 
 val of_string : ?start:int -> ?stop:int -> string -> char t
@@ -15,6 +17,8 @@ val bounds : 'a t -> int * int
 val for_all : 'a t -> f:('a -> bool) -> bool
 
 val length : 'a t -> int
+
+val is_empty : 'a t -> bool
 
 val reverse : 'a t -> 'a t
 
