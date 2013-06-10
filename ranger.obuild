@@ -6,4 +6,8 @@ obuild-ver: 1
 library ranger
   modules: Ranger
   src-dir: lib
-  c-dir: ./
+
+test ranger
+  src-dir: lib_test
+  main-is: ranger_test.ml
+  build-deps: ranger, kaputt
