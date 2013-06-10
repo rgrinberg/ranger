@@ -44,8 +44,8 @@ let for_all {start; stop; get} ~f =
     true
   with Exit -> false
 
-let reverse {start; stop; get} = 
-  {start=(-stop); stop=(-stop); get=(fun i -> get (-1 * i))}
+let reverse t = 
+  { t with get=(fun i -> t.get (t.stop - i)) }
 
 let fold_left {start; stop; get} ~init ~f =
   let acc = ref init in
