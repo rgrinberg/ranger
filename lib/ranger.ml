@@ -86,3 +86,7 @@ let takel_while ({start; stop; get} as t) ~f =
     done;
     {start=stop;stop;get}
   with S.Found stop -> {t with stop}
+
+let dropr t n = rev (dropl (rev t) n)
+
+let taker t n = rev (takel (rev t) n)

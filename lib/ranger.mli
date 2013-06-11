@@ -35,3 +35,7 @@ val dropl_while : 'a t -> f:('a -> bool) -> 'a t
 val takel : 'a t -> int -> 'a t
 
 val takel_while : 'a t -> f:('a -> bool) -> 'a t
+
+val dropr : 'a t -> int -> 'a t
+
+val taker : 'a t -> int -> 'a t
