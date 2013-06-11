@@ -28,10 +28,10 @@ val fold_left : 'a t -> init:'b -> f:('b -> 'a -> 'b) -> 'b
 
 val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init:'b -> 'b
 
-val drop : 'a t -> int -> 'a t
+val dropl : 'a t -> int -> 'a t
 
-val drop_while : 'a t -> f:('a -> bool) -> 'a t
+val dropl_while : 'a t -> f:('a -> bool) -> 'a t
 
-val take : 'a t -> int -> 'a t
+val takel : 'a t -> int -> 'a t
 
-val take_while : 'a t -> f:('a -> bool) -> 'a t
+val takel_while : 'a t -> f:('a -> bool) -> 'a t
