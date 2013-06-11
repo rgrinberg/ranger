@@ -27,6 +27,12 @@ let iter {start; stop; get} ~f =
 
 let rev t = 
   { t with get=(fun i -> t.get (t.stop - i)) }
+
+let to_list t = 
+  let elems = ref [] in
+  iter (rev t) ~f:(fun x -> elems := x :: !elems);
+  !elems
+
 let iteri {start; stop; get} ~f =
   for i = start to stop do
     f (i - start) (get i)

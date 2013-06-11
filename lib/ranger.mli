@@ -8,6 +8,8 @@ val of_array : ?start:int -> ?stop:int -> 'a array -> 'a t
 
 val of_string : ?start:int -> ?stop:int -> string -> char t
 
+val to_list : 'a t -> 'a list
+
 val iter : 'a t -> f:('a -> unit) -> unit
 
 val iteri : 'a t -> f:(int -> 'a -> unit) -> unit
