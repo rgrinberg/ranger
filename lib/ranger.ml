@@ -6,27 +6,34 @@ type 'a t = {
   get : int -> 'a;
 }
 
-let create ?(start=0) ~stop get = { start; stop; get }
+let parse_num = function
+  | `Inclusive x -> x + 1
+  | `Exclusive x -> x
+
+let parse_default ~default = function
+  | Some x -> parse_num x
+  | None -> default
+
+let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
 let get {start; get; _} n = get (start + n)
 
 let of_array ?(start=0) ?stop arr = 
-  let stop = match stop with
-    | None -> Array.length arr - 1
-    | Some x -> x in
-  { start; stop; get=(Array.get arr) }
+  let stop = parse_default ~default:(Array.length arr) stop
+  in { start; stop; get=(Array.get arr) }
 
 let of_string ?(start=0) ?stop str = 
-  let stop = match stop with
-    | None -> String.length str - 1
-    | Some x -> x in
+  let stop = parse_default ~default:(String.length str) stop in
   { start; stop; get=(String.get str) }
 
-let iter {start; stop; get} ~f =
-  for i = start to stop do f (get i) done
+let of_list ?(start=0) ?stop l =
+  let stop = parse_default ~default:(List.length l) stop in
+  { start ; stop; get=(List.nth l) }
 
-let rev t = 
-  { t with get=(fun i -> t.get (t.stop - i)) }
+let iter {start; stop; get} ~f =
+  for i = start to stop - 1 do f (get i) done
+
+let rev t = { t with get=(fun i -> t.get (t.stop - i)) }
 
 let to_list t = 
   let elems = ref [] in
@@ -34,18 +41,18 @@ let to_list t =
   !elems
 
 let iteri {start; stop; get} ~f =
-  for i = start to stop do
+  for i = start to stop - 1 do
     f (i - start) (get i)
   done
 
-let bounds {start; stop; _} = (start, stop)
+let bounds {start; stop; _} = (start, stop - 1)
 
-let length {start; stop; _} = stop - start + 1
+let length {start; stop; _} = stop - start
 
 let is_empty {start; stop; _} = start >= stop
 
 let for_all {start; stop; get} ~f = 
-  try for i = start to stop do
+  try for i = start to stop - 1 do
       if not (f (get i)) then
         raise Exit
     done;
@@ -54,7 +61,7 @@ let for_all {start; stop; get} ~f =
 
 let fold_left {start; stop; get} ~init ~f =
   let acc = ref init in
-  for i = start to stop do
+  for i = start to stop - 1 do
     acc := f !acc (get i)
   done; !acc
 
@@ -68,7 +75,7 @@ let dropl ({start; stop; _ } as t) n =
 let dropl_while ({start; stop; get} as t) ~f =
   let module S = struct exception Found of int end in
   try
-    for i = start to stop do
+    for i = start to stop - 1 do
       if not (f (get i)) then raise (S.Found i)
     done;
     {start=stop;stop;get}
@@ -76,12 +83,12 @@ let dropl_while ({start; stop; get} as t) ~f =
 
 let takel ({start; stop; _} as t) n = 
   if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
-  else {t with stop=(start+n)}
+  else {t with stop=(start + n)}
 
 let takel_while ({start; stop; get} as t) ~f =
   let module S = struct exception Found of int end in
   try
-    for i = start to stop do
+    for i = start to stop - 1 do
       if not (f (get i)) then raise (S.Found (pred i))
     done;
     {start=stop;stop;get}

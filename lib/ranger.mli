@@ -1,12 +1,18 @@
 type 'a t
 
-val create : ?start:int -> stop:int -> (int -> 'a) -> 'a t
+val create : ?start:int -> stop:[`Inclusive of int | `Exclusive of int] ->
+  (int -> 'a) -> 'a t
 
 val get : 'a t -> int -> 'a
 
-val of_array : ?start:int -> ?stop:int -> 'a array -> 'a t
+val of_array : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int]
+  -> 'a array -> 'a t
 
-val of_string : ?start:int -> ?stop:int -> string -> char t
+val of_string : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
+  string -> char t
+
+val of_list : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
+  'a list -> 'a t
 
 val to_list : 'a t -> 'a list
 
