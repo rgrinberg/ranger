@@ -20,7 +20,7 @@ val length : 'a t -> int
 
 val is_empty : 'a t -> bool
 
-val reverse : 'a t -> 'a t
+val rev : 'a t -> 'a t
 
 val fold_left : 'a t -> init:'b -> f:('b -> 'a -> 'b) -> 'b
 

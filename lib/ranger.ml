@@ -25,6 +25,8 @@ let of_string ?(start=0) ?stop str =
 let iter {start; stop; get} ~f =
   for i = start to stop do f (get i) done
 
+let rev t = 
+  { t with get=(fun i -> t.get (t.stop - i)) }
 let iteri {start; stop; get} ~f =
   for i = start to stop do
     f (i - start) (get i)
@@ -44,9 +46,6 @@ let for_all {start; stop; get} ~f =
     true
   with Exit -> false
 
-let reverse t = 
-  { t with get=(fun i -> t.get (t.stop - i)) }
-
 let fold_left {start; stop; get} ~init ~f =
   let acc = ref init in
   for i = start to stop do
@@ -54,7 +53,7 @@ let fold_left {start; stop; get} ~init ~f =
   done; !acc
 
 let fold_right t ~f ~init =
-  fold_left (reverse t) ~init ~f:(fun x y -> f y x)
+  fold_left (rev t) ~init ~f:(fun x y -> f y x)
 
 let drop ({start; stop; _ } as t) n =
   if (start + n) > stop then invalid_arg "Ranger.drop: out of bounds"
