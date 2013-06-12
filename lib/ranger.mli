@@ -3,7 +3,7 @@ type 'a t
 val create : ?start:int -> stop:[`Inclusive of int | `Exclusive of int] ->
   (int -> 'a) -> 'a t
 
-val get_exn : 'a t -> int -> 'a
+val get : 'a t -> int -> 'a
 
 val of_array : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int]
   -> 'a array -> 'a t

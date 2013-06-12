@@ -59,7 +59,7 @@ let () = Test.add_random_test ~title:"takel" ~nb_runs:20 arr_gen
        (R.takel range take_n, take_n, arr))
     [
       Spec.always ==> (fun (taken, l, _) -> (R.length taken) = l);
-      Spec.always ==> (fun (range, _, arr) -> (R.get_exn range 0) = arr.(0))
+      Spec.always ==> (fun (range, _, arr) -> (R.get range 0) = arr.(0))
     ]
 
 let () = Test.launch_tests ()
