@@ -46,19 +46,19 @@ val fold_left : 'a t -> init:'b -> f:('b -> 'a -> 'b) -> 'b
 
 val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init:'b -> 'b
 
-val dropl : 'a t -> int -> 'a t
+val dropl : 'a t -> n:int -> 'a t
 
 val dropl_while : 'a t -> f:('a -> bool) -> 'a t
 
-val takel : 'a t -> int -> 'a t
+val takel : 'a t -> n:int -> 'a t
 
 val takel_while : 'a t -> f:('a -> bool) -> 'a t
 
-val dropr : 'a t -> int -> 'a t
+val dropr : 'a t -> n:int -> 'a t
 
-val taker : 'a t -> int -> 'a t
+val taker : 'a t -> n:int -> 'a t
 
-val split_at : 'a t -> int -> 'a t * 'a t
+val split_at : 'a t -> n:int -> 'a t * 'a t
 
 val splitl : 'a t -> f:('a -> bool) -> 'a t * 'a t
 

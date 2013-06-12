@@ -119,7 +119,7 @@ let fold_left {start; stop; get} ~init ~f =
 let fold_right t ~f ~init =
   fold_left (rev t) ~init ~f:(fun x y -> f y x)
 
-let dropl ({start; stop; _ } as t) n =
+let dropl ({start; stop; _ } as t) ~n =
   if (start + n) > stop then invalid_arg "Ranger.drop: out of bounds"
   else {t with start=(start+n)}
 
@@ -131,7 +131,7 @@ let dropl_while ({start; stop; get} as t) ~f =
     {start=stop;stop;get}
   with Found start -> {t with start}
 
-let takel ({start; stop; _} as t) n = 
+let takel ({start; stop; _} as t) ~n = 
   if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
   else {t with stop=(start + n)}
 
@@ -143,9 +143,9 @@ let takel_while ({start; stop; get} as t) ~f =
     {start=stop;stop;get}
   with Found stop -> {t with stop}
 
-let dropr t n = rev (dropl (rev t) n)
+let dropr t ~n = rev (dropl (rev t) n)
 
-let taker t n = rev (takel (rev t) n)
+let taker t ~n = rev (takel (rev t) n)
 
 let tl t = 
   if t.start + 1 >= t.stop then None
@@ -169,7 +169,7 @@ let findi t ~f =
 
 let find t ~f = option_map (findi t ~f) ~f:snd
 
-let split_at t n = (takel t n, dropl t n)
+let split_at t ~n = (takel t n, dropl t n)
 
 let splitl t ~f =
   match findi t ~f:(fun x -> not (f x)) with
