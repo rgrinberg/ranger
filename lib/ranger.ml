@@ -16,6 +16,8 @@ let parse_default ~default = function
 
 let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
+let repeat ~times a = {start=0;stop=times;get=(fun _ -> a) }
+
 let get {start; get; _} n = get (start + n)
 
 let length {start; stop; _} = stop - start
