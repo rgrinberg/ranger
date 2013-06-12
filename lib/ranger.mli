@@ -18,6 +18,8 @@ val of_list : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
 
 val to_list : 'a t -> 'a list
 
+val to_string : char t -> string
+
 val iter : 'a t -> f:('a -> unit) -> unit
 
 val iteri : 'a t -> f:(int -> 'a -> unit) -> unit

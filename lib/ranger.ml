@@ -93,6 +93,11 @@ let iteri {start; stop; get} ~f =
     f (i - start) (get i)
   done
 
+let to_string t =
+  let s = String.create (length t) in
+  iteri t ~f:(fun i c -> s.[i] <- c);
+  s
+
 let bounds {start; stop; _} = (start, stop - 1)
 
 let is_empty {start; stop; _} = start >= stop
