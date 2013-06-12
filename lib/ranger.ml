@@ -97,3 +97,19 @@ let takel_while ({start; stop; get} as t) ~f =
 let dropr t n = rev (dropl (rev t) n)
 
 let taker t n = rev (takel (rev t) n)
+
+let tl t = 
+  if t.start + 1 >= t.stop then None
+  else Some {t with start=(t.start + 1) }
+
+let tl_exn t =
+  if t.start + 1 >= t.stop then invalid_arg "Range.tl_exn: out of bounds"
+  else {t with start=(t.start + 1) }
+
+let hd t = 
+  if t.start >= t.stop then None
+  else Some (get_exn t 0)
+
+let hd_exn t = 
+  if t.start >= t.stop then invalid_arg "Range.hd_exn: out of bounds"
+  else get_exn t 0

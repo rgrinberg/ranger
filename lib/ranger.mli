@@ -3,7 +3,7 @@ type 'a t
 val create : ?start:int -> stop:[`Inclusive of int | `Exclusive of int] ->
   (int -> 'a) -> 'a t
 
-val get : 'a t -> int -> 'a
+val get_exn : 'a t -> int -> 'a
 
 val of_array : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int]
   -> 'a array -> 'a t
@@ -19,6 +19,14 @@ val to_list : 'a t -> 'a list
 val iter : 'a t -> f:('a -> unit) -> unit
 
 val iteri : 'a t -> f:(int -> 'a -> unit) -> unit
+
+exception Longer of [`Left | `Right]
+
+val iter2_exn : 'a t -> 'b t -> f:('a -> 'b -> unit) -> unit
+
+val equal : ?eq:('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+
+val compare : ?cmp:('a -> 'a -> int) -> 'a t -> 'a t -> int
 
 val bounds : 'a t -> int * int
 
@@ -45,3 +53,11 @@ val takel_while : 'a t -> f:('a -> bool) -> 'a t
 val dropr : 'a t -> int -> 'a t
 
 val taker : 'a t -> int -> 'a t
+
+val hd : 'a t -> 'a option
+
+val hd_exn : 'a t -> 'a
+
+val tl : 'a t -> 'a t option
+
+val tl_exn : 'a t -> 'a t
