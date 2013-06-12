@@ -16,17 +16,17 @@ let parse_default ~default = function
   | Some x -> parse_num x
   | None -> default
 
-let empty = {start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty")}
+let empty = { start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty") }
 
 let option_map t ~f = match t with None -> None | Some x -> Some (f x)
 
 let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
-let repeat ~times a = {start=0;stop=times;get=(fun _ -> a) }
+let repeat ~times a = { start=0;stop=times;get=(fun _ -> a) }
 
-let get {start; get; _} n = get (start + n)
+let get { start; get; _ } n = get (start + n)
 
-let length {start; stop; _} = stop - start
+let length { start; stop; _ } = stop - start
 
 let of_array ?(start=0) ?stop arr = 
   let stop = parse_default ~default:(Array.length arr) stop
@@ -40,7 +40,7 @@ let of_list ?(start=0) ?stop l =
   let stop = parse_default ~default:(List.length l) stop in
   { start ; stop; get=(List.nth l) }
 
-let iter {start; stop; get} ~f =
+let iter { start; stop; get } ~f =
   for i = start to stop - 1 do f (get i) done
 
 exception Longer of [`Left | `Right]
@@ -88,7 +88,7 @@ let to_list t =
   iter (rev t) ~f:(fun x -> elems := x :: !elems);
   !elems
 
-let iteri {start; stop; get} ~f =
+let iteri { start; stop; get } ~f =
   for i = start to stop - 1 do
     f (i - start) (get i)
   done
@@ -98,11 +98,11 @@ let to_string t =
   iteri t ~f:(fun i c -> s.[i] <- c);
   s
 
-let bounds {start; stop; _} = (start, stop - 1)
+let bounds { start; stop; _ } = (start, stop - 1)
 
-let is_empty {start; stop; _} = start >= stop
+let is_empty { start; stop; _ } = start >= stop
 
-let for_all {start; stop; get} ~f = 
+let for_all { start; stop; get } ~f = 
   try for i = start to stop - 1 do
       if not (f (get i)) then
         raise Exit
@@ -110,7 +110,7 @@ let for_all {start; stop; get} ~f =
     true
   with Exit -> false
 
-let fold_left {start; stop; get} ~init ~f =
+let fold_left { start; stop; get } ~init ~f =
   let acc = ref init in
   for i = start to stop - 1 do
     acc := f !acc (get i)
@@ -119,28 +119,28 @@ let fold_left {start; stop; get} ~init ~f =
 let fold_right t ~f ~init =
   fold_left (rev t) ~init ~f:(fun x y -> f y x)
 
-let dropl ({start; stop; _ } as t) ~n =
+let dropl ({ start; stop; _ } as t) ~n =
   if (start + n) > stop then invalid_arg "Ranger.drop: out of bounds"
   else {t with start=(start+n)}
 
-let dropl_while ({start; stop; get} as t) ~f =
+let dropl_while ({ start; stop; get } as t) ~f =
   try
     for i = start to stop - 1 do
       if not (f (get i)) then raise (Found i)
     done;
-    {start=stop;stop;get}
+    { start=stop;stop;get }
   with Found start -> {t with start}
 
-let takel ({start; stop; _} as t) ~n = 
+let takel ({ start; stop; _ } as t) ~n = 
   if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
   else {t with stop=(start + n)}
 
-let takel_while ({start; stop; get} as t) ~f =
+let takel_while ({ start; stop; get } as t) ~f =
   try
     for i = start to stop - 1 do
       if not (f (get i)) then raise (Found (pred i))
     done;
-    {start=stop;stop;get}
+    { start=stop;stop;get }
   with Found stop -> {t with stop}
 
 let dropr t ~n = rev (dropl (rev t) n)
