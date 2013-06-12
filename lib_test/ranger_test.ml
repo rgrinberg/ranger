@@ -62,6 +62,13 @@ let () = Test.add_random_test ~title:"takel" ~nb_runs:20 arr_gen
       Spec.always ==> (fun (range, _, arr) -> (R.get range 0) = arr.(0))
     ]
 
+let () = Test.add_simple_test ~title:"drop word"
+    (fun () ->
+       let r = Ranger.of_string "one two three" in
+       let dropped = Ranger.dropl_while r ~f:((<>) ' ') in
+       let l = Ranger.to_list dropped in
+       Assert.equal_string (R.to_string dropped) " two three")
+
 let () = Test.launch_tests ()
 
 
