@@ -8,6 +8,10 @@ let arr_gen =
   let open Gen in
   array (make_int 0 10) (make_int 4 10)
 
+let arr2_gen = 
+  let open Gen in
+  Gen.zip2 arr_gen arr_gen
+
 let () = Test.add_simple_test ~title:"of_array"
     (fun () ->
        let rng = R.of_array arr ~start:1 ~stop:(`Inclusive 2) in
@@ -33,6 +37,13 @@ let () = Test.add_random_test ~title:"length" ~nb_runs:20 arr_gen
           (R.length range) = (Array.length arr))
     ]
 
+let () = Test.add_random_test ~title:"equal" ~nb_runs:20 arr2_gen
+    (fun (a1, a2) -> (R.compare (R.of_array a1) (R.of_array a2),
+                      compare a1 a2))
+    [
+      Spec.always ==> (fun (x1, x2) -> x1 = x2)
+    ]
+
 let () = Test.add_simple_test ~title:"takel empty"
     (fun () ->
        let range = R.of_array arr in
@@ -48,6 +59,7 @@ let () = Test.add_random_test ~title:"takel" ~nb_runs:20 arr_gen
        (R.takel range take_n, take_n, arr))
     [
       Spec.always ==> (fun (taken, l, _) -> (R.length taken) = l);
+      Spec.always ==> (fun (range, _, arr) -> (R.get_exn range 0) = arr.(0))
     ]
 
 let () = Test.launch_tests ()
