@@ -56,6 +56,12 @@ val dropr : 'a t -> int -> 'a t
 
 val taker : 'a t -> int -> 'a t
 
+val split_at : 'a t -> int -> 'a t * 'a t
+
+val splitl : 'a t -> f:('a -> bool) -> 'a t * 'a t
+
+val splitr : 'a t -> f:('a -> bool) -> 'a t * 'a t
+
 val hd : 'a t -> 'a option
 
 val hd_exn : 'a t -> 'a

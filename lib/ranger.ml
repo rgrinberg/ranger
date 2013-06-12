@@ -6,6 +6,8 @@ type 'a t = {
   get : int -> 'a;
 }
 
+exception Found of int 
+
 let parse_num = function
   | `Inclusive x -> x + 1
   | `Exclusive x -> x
@@ -13,6 +15,10 @@ let parse_num = function
 let parse_default ~default = function
   | Some x -> parse_num x
   | None -> default
+
+let empty = {start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty")}
+
+let option_map t ~f = match t with None -> None | Some x -> Some (f x)
 
 let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
@@ -113,26 +119,24 @@ let dropl ({start; stop; _ } as t) n =
   else {t with start=(start+n)}
 
 let dropl_while ({start; stop; get} as t) ~f =
-  let module S = struct exception Found of int end in
   try
     for i = start to stop - 1 do
-      if not (f (get i)) then raise (S.Found i)
+      if not (f (get i)) then raise (Found i)
     done;
     {start=stop;stop;get}
-  with S.Found start -> {t with start}
+  with Found start -> {t with start}
 
 let takel ({start; stop; _} as t) n = 
   if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
   else {t with stop=(start + n)}
 
 let takel_while ({start; stop; get} as t) ~f =
-  let module S = struct exception Found of int end in
   try
     for i = start to stop - 1 do
-      if not (f (get i)) then raise (S.Found (pred i))
+      if not (f (get i)) then raise (Found (pred i))
     done;
     {start=stop;stop;get}
-  with S.Found stop -> {t with stop}
+  with Found stop -> {t with stop}
 
 let dropr t n = rev (dropl (rev t) n)
 
@@ -153,3 +157,23 @@ let hd t =
 let hd_exn t = 
   if t.start >= t.stop then invalid_arg "Range.hd_exn: out of bounds"
   else get t 0
+
+let findi t ~f = 
+  try iteri t ~f:(fun i x -> if f x then raise (Found i)); None
+  with Found x -> Some (x, get t x)
+
+let find t ~f = option_map (findi t ~f) ~f:snd
+
+let split_at t n = (takel t n, dropl t n)
+
+let splitl t ~f =
+  match findi t ~f:(fun x -> not (f x)) with
+  | None -> (empty, t)
+  | Some (i, _) -> split_at t i
+
+let splitr t ~f = 
+  match findi (rev t) ~f:(fun x -> not (f x)) with
+  | None -> (empty, t)
+  | Some (i, _) -> split_at t i
+
+
