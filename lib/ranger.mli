@@ -1,18 +1,27 @@
+(** Ranger - An interval slice for any data structures *)
+
+(** Interval slices are called ranges in this library *)
 type 'a t
 
 val create : ?start:int -> stop:[`Inclusive of int | `Exclusive of int] ->
   (int -> 'a) -> 'a t
 
+(** [repeat ~times:3 1] |> to_list is equivalent to [1;1;1] *)
 val repeat : times:int -> 'a -> 'a t
 
+(** [get t i] gets the ith element of the range (0 being the first element
+    in the range) *)
 val get : 'a t -> int -> 'a
 
+(** Create a range out of an array *)
 val of_array : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int]
   -> 'a array -> 'a t
 
+(** Create a range out of a string *)
 val of_string : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
   string -> char t
 
+(** Create a range out of a list *)
 val of_list : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
   'a list -> 'a t
 
@@ -32,8 +41,12 @@ val equal : ?eq:('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
 val compare : ?cmp:('a -> 'a -> int) -> 'a t -> 'a t -> int
 
+(** [bounds t] returns the first and last index in the range corresponding to
+    the value the range was created from *)
 val bounds : 'a t -> int * int
 
+(** [for_all t ~f] returns true if [f] returns true for every element
+    spanned by t. false otherwise*)
 val for_all : 'a t -> f:('a -> bool) -> bool
 
 val length : 'a t -> int
