@@ -68,6 +68,16 @@ let () = Test.add_simple_test ~title:"drop word"
        let dropped = Ranger.dropl_while r ~f:((<>) ' ') in
        Assert.equal_string (R.to_string dropped) " two three")
 
+let () = Test.add_random_test ~title:"taker" ~nb_runs:20 arr_gen
+    (fun arr ->
+       let range = R.of_array arr in
+       let len = Array.length arr in
+       let take_n = if len = 0 then 0 else (Random.int len) in
+       (R.taker range take_n, take_n, arr))
+    [
+      Spec.always ==> (fun (taken, l, _) -> (R.length taken) = l);
+    ]
+
 let () = Test.launch_tests ()
 
 
