@@ -35,6 +35,9 @@ val iteri : 'a t -> f:(int -> 'a -> unit) -> unit
 
 exception Longer of [`Left | `Right]
 
+(** [iter2_exn t1 t2 ~f] iterates over [t1] [t2] together and executes
+    f on both elements. raieses [Longer `Left] if [t1] termintates first
+    otherwise raises [Longer `Right] *)
 val iter2_exn : 'a t -> 'b t -> f:('a -> 'b -> unit) -> unit
 
 val equal : ?eq:('a -> 'a -> bool) -> 'a t -> 'a t -> bool
