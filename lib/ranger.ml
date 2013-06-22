@@ -181,4 +181,8 @@ let splitr t ~f =
   | None -> (empty, t)
   | Some (i, _) -> split_at t i
 
-
+let reduce t ~f =
+  if is_empty t then None
+  else
+    let (hd, tl) = (hd_exn t, tl_exn t) in
+    Some (fold_left t ~init:hd ~f)

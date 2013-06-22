@@ -62,6 +62,8 @@ val fold_left : 'a t -> init:'b -> f:('b -> 'a -> 'b) -> 'b
 
 val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init:'b -> 'b
 
+val reduce : 'a t -> f:('a -> 'a -> 'a) -> 'a option
+
 val dropl : 'a t -> n:int -> 'a t
 
 val dropl_while : 'a t -> f:('a -> bool) -> 'a t
