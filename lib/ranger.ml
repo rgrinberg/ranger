@@ -98,6 +98,9 @@ let to_string t =
   iteri t ~f:(fun i c -> s.[i] <- c);
   s
 
+let to_stream t = 
+  Stream.from (fun x -> try Some (get t) with (Invalid_argument _) -> None)
+
 let bounds { start; stop; _ } = (start, stop - 1)
 
 let is_empty { start; stop; _ } = start >= stop
