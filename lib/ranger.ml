@@ -189,3 +189,12 @@ let reduce t ~f =
   else
     let (hd, tl) = (hd_exn t, tl_exn t) in
     Some (fold_left t ~init:hd ~f)
+
+let mid_point t =
+  let (min, max) = bounds t in
+  match max - min with
+  | 0 -> Some(`One (get t 0))
+  | -1 -> None
+  | x when x mod 2 = 0 -> Some (`One (get t (x/2)))
+  | x ->
+    Some (`Two (get t (x/2), get t ((x/2) + 1)))
