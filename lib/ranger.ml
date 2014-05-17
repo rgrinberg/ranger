@@ -1,5 +1,3 @@
-external (|>) : 'a -> ('a -> 'b) -> 'b = "%revapply"
-
 type 'a t = {
   start : int;
   stop : int;
@@ -18,7 +16,10 @@ let parse_default ~default = function
 
 let empty = { start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty") }
 
-let option_map t ~f = match t with None -> None | Some x -> Some (f x)
+let option_map t ~f = 
+  match t with
+  | None -> None
+  | Some x -> Some (f x)
 
 let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
@@ -49,8 +50,8 @@ let iter2_exn t1 t2 ~f =
   let i = ref 0 in
   let length_t2 = length t2 in
   iter t1 ~f:(fun e -> 
-      if !i = length_t2 then raise (Longer `Left)
-      else begin f e (get t2 !i); incr i end
+    if !i = length_t2 then raise (Longer `Left)
+    else begin f e (get t2 !i); incr i end
   ); if length_t2 > !i then raise (Longer `Right)
 
 (* just use this for early return *)
@@ -70,13 +71,13 @@ let compare ?(cmp=compare) t1 t2 =
   let module M = struct exception Exit of int end in
   let open M in
   try iter2_exn t1 t2 ~f:(fun a b ->
-      match cmp a b with
-      | -1 -> raise (Exit (-1))
-      | 1 -> raise (Exit 1)
-      | 0 -> ()
-      | x -> invalid_arg ("Ranger.compare: bad argument compare " ^
-                            (string_of_int x))
-    ); 0
+    match cmp a b with
+    | -1 -> raise (Exit (-1))
+    | 1 -> raise (Exit 1)
+    | 0 -> ()
+    | x -> invalid_arg ("Ranger.compare: bad argument compare " ^
+                        (string_of_int x))
+  ); 0
   with
   | Longer `Left -> 1
   | Longer `Right -> -1
@@ -117,7 +118,8 @@ let fold_left { start; stop; get } ~init ~f =
   let acc = ref init in
   for i = start to stop - 1 do
     acc := f !acc (get i)
-  done; !acc
+  done;
+  !acc
 
 let fold_right t ~f ~init =
   fold_left (rev t) ~init ~f:(fun x y -> f y x)
@@ -196,5 +198,4 @@ let mid_point t =
   | 0 -> Some(`One (get t 0))
   | -1 -> None
   | x when x mod 2 = 0 -> Some (`One (get t (x/2)))
-  | x ->
-    Some (`Two (get t (x/2), get t ((x/2) + 1)))
+  | x -> Some (`Two (get t (x/2), get t ((x/2) + 1)))
