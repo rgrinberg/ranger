@@ -1,5 +1,5 @@
 PKG kaputt
 S lib
 S lib_test
-B dist/build/ranger
-B dist/build/lib-ranger
+B _build/lib
+B _build/lib_test

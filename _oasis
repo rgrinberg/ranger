@@ -1,0 +1,27 @@
+OASISFormat: 0.4
+Name:        ranger
+Version:     0.8.2
+Synopsis:    A consecutive range slice library for OCaml
+Authors:     Rudi Grinberg
+Homepage:    https://github.com/rgrinberg/ranger
+License:     WTFPL
+BuildTools: ocamlbuild
+Plugins:     META (0.4)
+
+Library ranger
+  Path:       lib
+  Modules:    Ranger
+
+Test ranger_test
+  Run$:               flag(tests)
+  Command:            $ranger_test
+  WorkingDirectory:   lib_test
+
+Executable ranger_test
+  Path: lib_test
+  MainIs: ranger_test.ml
+  Custom: true
+  CompiledObject: best
+  Install: false
+  BuildDepends: ranger, kaputt
+
