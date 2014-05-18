@@ -37,9 +37,9 @@ let () = Test.add_random_test ~title:"length" ~nb_runs:20 arr_gen
           (R.length range) = (Array.length arr))
     ]
 
-let () = Test.add_random_test ~title:"equal" ~nb_runs:20 arr2_gen
-    (fun (a1, a2) -> (R.compare (R.of_array a1) (R.of_array a2),
-                      compare a1 a2))
+let () = Test.add_random_test ~title:"equal" ~nb_runs:20 arr_gen
+    (fun a1 -> (R.compare (R.of_array a1) (R.of_array a1),
+                      compare a1 a1))
     [
       Spec.always ==> (fun (x1, x2) -> x1 = x2)
     ]
