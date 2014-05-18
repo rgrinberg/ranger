@@ -13,7 +13,6 @@ Library ranger
   Modules:    Ranger
 
 Test ranger_test
-  Run$:               flag(tests)
   Command:            $ranger_test
   WorkingDirectory:   lib_test
 
