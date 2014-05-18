@@ -83,4 +83,4 @@ val tl : 'a t -> 'a t option
 
 val tl_exn : 'a t -> 'a t
 
-val mid_point : 'a t -> [`One of 'a | `Two of 'a * 'a] option
+val mid : 'a t -> [`One of 'a | `Two of 'a * 'a] option

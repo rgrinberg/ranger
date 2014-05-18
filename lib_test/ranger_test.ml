@@ -88,7 +88,7 @@ let () = Test.add_simple_test ~title:"midpoint"
          (Some (`Two (2,3)), R.of_array [|1;2;3;4|])
        ]
        in List.iter (fun (res, range) ->
-           let md = R.mid_point range in
+           let md = R.mid range in
            Assert.equal md res) tests
     )
 

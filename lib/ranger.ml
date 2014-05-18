@@ -192,7 +192,7 @@ let reduce t ~f =
     let (hd, tl) = (hd_exn t, tl_exn t) in
     Some (fold_left t ~init:hd ~f)
 
-let mid_point t =
+let mid t =
   let (min, max) = bounds t in
   match max - min with
   | 0 -> Some(`One (get t 0))
