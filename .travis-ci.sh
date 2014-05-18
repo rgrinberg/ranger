@@ -1,4 +1,4 @@
-OPAM_DEPENDS="obuild kaputt"
+OPAM_DEPENDS="oasis kaputt"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
     4.01.0,1.1.0) ppa=avsm/ocaml41+opam11 ;;
@@ -23,6 +23,5 @@ opam install ${OPAM_DEPENDS}
 
 eval `opam config env`
 
-obuild configure --enable-tests
-obuild build
-obuild test
+make configure
+make test
