@@ -1,6 +1,6 @@
 name: ranger
-version: 0.0.0
-synopsis: my new project
+version: 0.0.1
+synopsis: A cosecutive range slice library for OCaml
 obuild-ver: 1
 
 library ranger
