@@ -1,18 +1,45 @@
+default: all
 
 configure:
-	obuild configure --enable-tests
+	oasis setup
+	ocaml setup.ml -configure --enable-tests
 
 configure-no-tests:
-	obuild configure
-
-test:
-	obuild test
-
-clean:
-	obuild clean
+	oasis setup
+	ocaml setup.ml -configure
 
 build:
-	obuild build
+	ocaml setup.ml -build
 
-.PHONY: configure configure-no-tests test clean
+all:
+	ocaml setup.ml -all
 
+test: build
+	ocaml setup.ml -test
+
+doc:
+	ocaml setup.ml -doc
+
+clean:
+	ocaml setup.ml -clean
+
+scrub: clean
+	# ocaml setup.ml -distclean
+	rm -rf _tags
+	rm -rf myocamlbuild.ml
+	rm -rf META
+	rm -rf setup.ml
+	rm -rf lib/*.mllib
+	rm -rf lib/*.mlpack
+	rm -rf lib/*.mldylib
+
+install:
+	ocaml setup.ml -install
+
+uninstall:
+	ocaml setup.ml -uninstall
+
+reinstall:
+	ocaml setup.ml -reinstall
+
+.PHONY: build all build default install uninstall
