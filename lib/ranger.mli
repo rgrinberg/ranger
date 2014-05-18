@@ -1,6 +1,6 @@
 (** Ranger - An interval slice for any data structures *)
 
-(** Interval slices are called ranges in this library *)
+(** Interval slices are called ranges *)
 type 'a t
 
 val create : ?start:int -> stop:[`Inclusive of int | `Exclusive of int] ->
@@ -32,13 +32,6 @@ val to_string : char t -> string
 val iter : 'a t -> f:('a -> unit) -> unit
 
 val iteri : 'a t -> f:(int -> 'a -> unit) -> unit
-
-exception Longer of [`Left | `Right]
-
-(** [iter2_exn t1 t2 ~f] iterates over [t1] [t2] together and executes
-    f on both elements. raieses [Longer `Left] if [t1] termintates first
-    otherwise raises [Longer `Right] *)
-val iter2_exn : 'a t -> 'b t -> f:('a -> 'b -> unit) -> unit
 
 val equal : ?eq:('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
