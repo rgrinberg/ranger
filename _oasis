@@ -4,8 +4,8 @@ Version:     0.0.1
 Synopsis:    A consecutive range slice library for strings, arrays, etc.
 Authors:     Rudi Grinberg
 Homepage:    https://github.com/rgrinberg/ranger
-License:     WTFPL
-BuildTools: ocamlbuild
+License:     MIT
+BuildTools:  ocamlbuild
 Plugins:     META (0.4)
 
 Library ranger
@@ -17,10 +17,11 @@ Test ranger_test
   WorkingDirectory:   lib_test
 
 Executable ranger_test
-  Path: lib_test
-  MainIs: ranger_test.ml
-  Custom: true
+  Path:           lib_test
+  MainIs:         ranger_test.ml
+  Custom:         true
   CompiledObject: best
-  Install: false
-  BuildDepends: ranger, kaputt
+  Install:        false
+  Build$:         flag(tests)
+  BuildDepends:   ranger, kaputt
 
