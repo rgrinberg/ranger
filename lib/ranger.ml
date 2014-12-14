@@ -99,7 +99,7 @@ let iteri { start; stop; get } ~f =
   done
 
 let to_bytes t =
-  Bytes.init (length t) t.get
+  Bytes.init (length t) (get t)
 
 let to_string t =
   (* String.init is not available for < 4.02 *)
