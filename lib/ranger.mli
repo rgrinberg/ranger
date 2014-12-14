@@ -21,6 +21,10 @@ val of_array : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int]
 val of_string : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
   string -> char t
 
+(** Create a range out of a bytes *)
+val of_bytes : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
+  Bytes.t -> char t
+
 (** Create a range out of a list *)
 val of_list : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
   'a list -> 'a t
@@ -28,6 +32,8 @@ val of_list : ?start:int -> ?stop:[`Inclusive of int | `Exclusive of int] ->
 val to_list : 'a t -> 'a list
 
 val to_string : char t -> string
+
+val to_bytes : char t -> Bytes.t
 
 val iter : 'a t -> f:('a -> unit) -> unit
 

@@ -37,6 +37,10 @@ let of_string ?(start=0) ?stop str =
   let stop = parse_default ~default:(String.length str) stop in
   { start; stop; get=(String.get str) }
 
+let of_bytes ?(start=0) ?stop str =
+  let stop = parse_default ~default:(Bytes.length str) stop in
+  { start; stop; get=(Bytes.get str) }
+
 let of_list ?(start=0) ?stop l =
   let stop = parse_default ~default:(List.length l) stop in
   { start ; stop; get=(List.nth l) }
@@ -94,12 +98,15 @@ let iteri { start; stop; get } ~f =
     f (i - start) (get i)
   done
 
-let to_string t =
-  let s = String.create (length t) in
-  iteri t ~f:(fun i c -> s.[i] <- c);
-  s
+let to_bytes t =
+  Bytes.init (length t) t.get
 
-let to_stream t = 
+let to_string t =
+  (* String.init is not available for < 4.02 *)
+  (* String.init (length t) t.get *)
+  Bytes.unsafe_to_string (to_bytes t)
+
+let to_stream t =
   Stream.from (fun x -> try Some (get t) with (Invalid_argument _) -> None)
 
 let bounds { start; stop; _ } = (start, stop - 1)
