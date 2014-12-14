@@ -1,7 +1,8 @@
-OPAM_DEPENDS="oasis kaputt"
+PACKAGE=ranger
 
-case "$OCAML_VERSION,$OPAM_VERSION" in
-    4.01.0,1.1.0) ppa=avsm/ocaml41+opam11 ;;
+case "$OCAML_VERSION" in
+    4.01.0) ppa=avsm/ocaml42+opam12 ;;
+    4.02.1) ppa=avsm/ocaml41+opam12 ;;
     *) echo Unknown $OCAML_VERSION,$OPAM_VERSION; exit 1 ;;
 esac
 
@@ -19,9 +20,11 @@ opam --git-version
 
 # opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
 opam init
-opam install ${OPAM_DEPENDS}
-
 eval `opam config env`
 
-make configure
-make test
+opam pin add --verbose -n ${PACKAGE} .
+
+opam install -t --deps-only ${PACKAGE}
+
+opam install -t --verbose ${PACKAGE}
+opam remove --verbose ${PACKAGE}
