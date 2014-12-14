@@ -24,6 +24,7 @@ remove: ["ocamlfind" "remove" "ranger"]
 depends: [
   "ocamlfind" {build}
   "kaputt" {test}
+  "base-bytes"
   # Only for dev version
   "oasis" {build}
 ]

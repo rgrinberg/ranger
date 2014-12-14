@@ -1,8 +1,8 @@
 PACKAGE=ranger
 
 case "$OCAML_VERSION" in
-    4.01.0) ppa=avsm/ocaml42+opam12 ;;
-    4.02.1) ppa=avsm/ocaml41+opam12 ;;
+    4.01.0) ppa=avsm/ocaml41+opam12 ;;
+    4.02.1) ppa=avsm/ocaml42+opam12 ;;
     *) echo Unknown $OCAML_VERSION,$OPAM_VERSION; exit 1 ;;
 esac
 

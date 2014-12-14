@@ -11,6 +11,7 @@ Plugins:     META (0.4), Devfiles (0.4)
 Library ranger
   Path:       lib
   Modules:    Ranger
+  BuildDepends:   bytes
 
 AlphaFeatures: ocamlbuild_more_args
 Document ranger
