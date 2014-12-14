@@ -8,3 +8,4 @@ META
 *.native
 *.byte
 *.docdir
+myocamlbuild.ml
