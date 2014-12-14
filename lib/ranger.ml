@@ -4,7 +4,7 @@ type 'a t = {
   get : int -> 'a;
 }
 
-exception Found of int 
+exception Found of int
 
 let parse_num = function
   | `Inclusive x -> x + 1
@@ -16,7 +16,7 @@ let parse_default ~default = function
 
 let empty = { start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty") }
 
-let option_map t ~f = 
+let option_map t ~f =
   match t with
   | None -> None
   | Some x -> Some (f x)
@@ -29,11 +29,11 @@ let get { start; get; _ } n = get (start + n)
 
 let length { start; stop; _ } = stop - start
 
-let of_array ?(start=0) ?stop arr = 
+let of_array ?(start=0) ?stop arr =
   let stop = parse_default ~default:(Array.length arr) stop
   in { start; stop; get=(Array.get arr) }
 
-let of_string ?(start=0) ?stop str = 
+let of_string ?(start=0) ?stop str =
   let stop = parse_default ~default:(String.length str) stop in
   { start; stop; get=(String.get str) }
 
@@ -50,10 +50,10 @@ let iter { start; stop; get } ~f =
 
 exception Longer of [`Left | `Right]
 
-let iter2_exn t1 t2 ~f = 
+let iter2_exn t1 t2 ~f =
   let i = ref 0 in
   let length_t2 = length t2 in
-  iter t1 ~f:(fun e -> 
+  iter t1 ~f:(fun e ->
     if !i = length_t2 then raise (Longer `Left)
     else begin f e (get t2 !i); incr i end
   ); if length_t2 > !i then raise (Longer `Right)
@@ -61,10 +61,10 @@ let iter2_exn t1 t2 ~f =
 (* just use this for early return *)
 let fast_equal t1 t2 = (length t1) = (length t2)
 
-let equal ?(eq=(=)) t1 t2 = 
+let equal ?(eq=(=)) t1 t2 =
   if not (fast_equal t1 t2) then false
   else
-    try 
+    try
       for i = 0 to length t1 - 1 do
         if not (eq (get t1 i) (get t2 i)) then
           raise Exit
@@ -88,7 +88,7 @@ let compare ?(cmp=compare) t1 t2 =
 
 let rev t = { t with get=(fun i -> t.get (t.stop - i)) }
 
-let to_list t = 
+let to_list t =
   let elems = ref [] in
   iter (rev t) ~f:(fun x -> elems := x :: !elems);
   !elems
@@ -113,7 +113,7 @@ let bounds { start; stop; _ } = (start, stop - 1)
 
 let is_empty { start; stop; _ } = start >= stop
 
-let for_all { start; stop; get } ~f = 
+let for_all { start; stop; get } ~f =
   try for i = start to stop - 1 do
       if not (f (get i)) then
         raise Exit
@@ -143,7 +143,7 @@ let dropl_while ({ start; stop; get } as t) ~f =
     { start=stop;stop;get }
   with Found start -> {t with start}
 
-let takel ({ start; stop; _ } as t) ~n = 
+let takel ({ start; stop; _ } as t) ~n =
   if (start + n) > stop then invalid_arg "Ranger.take: out of bounds"
   else {t with stop=(start + n)}
 
@@ -159,7 +159,7 @@ let dropr t ~n = rev (dropl (rev t) n)
 
 let taker t ~n = rev (takel (rev t) n)
 
-let tl t = 
+let tl t =
   if t.start + 1 >= t.stop then None
   else Some {t with start=(t.start + 1) }
 
@@ -167,15 +167,15 @@ let tl_exn t =
   if t.start + 1 >= t.stop then invalid_arg "Range.tl_exn: out of bounds"
   else {t with start=(t.start + 1) }
 
-let hd t = 
+let hd t =
   if t.start >= t.stop then None
   else Some (get t 0)
 
-let hd_exn t = 
+let hd_exn t =
   if t.start >= t.stop then invalid_arg "Range.hd_exn: out of bounds"
   else get t 0
 
-let findi t ~f = 
+let findi t ~f =
   try iteri t ~f:(fun i x -> if f x then raise (Found i)); None
   with Found x -> Some (x, get t x)
 
@@ -188,7 +188,7 @@ let splitl t ~f =
   | None -> (empty, t)
   | Some (i, _) -> split_at t i
 
-let splitr t ~f = 
+let splitr t ~f =
   match findi (rev t) ~f:(fun x -> not (f x)) with
   | None -> (empty, t)
   | Some (i, _) -> split_at t i
