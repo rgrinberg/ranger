@@ -7,7 +7,7 @@ name BatSubstring.
 
 ### Example:
 
-```
+```ocaml
 
 let range = Ranger.of_string "one two three four"
 
