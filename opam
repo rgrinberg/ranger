@@ -1,0 +1,31 @@
+opam-version: "1.2"
+
+name: "ranger"
+version: "0.0.1"
+maintainer: "rudi.grinberg@gmail.com"
+authors: "Rudi Grinberg"
+license: "WTFPL"
+homepage: "https://github.com/rgrinberg/ranger"
+bug-reports: "https://github.com/rgrinberg/ranger/issues"
+dev-repo: "https://github.com/rgrinberg/ranger.git"
+
+build: [
+  ["ocaml" "setup.ml" "-configure"]
+  ["ocaml" "setup.ml" "-build"]
+]
+install: ["ocaml" "setup.ml" "-install"]
+build-doc: ["ocaml" "setup.ml" "-doc"]
+build-test: [
+  ["ocaml" "setup.ml" "-configure" "--enable-tests"]
+  ["ocaml" "setup.ml" "-build"]
+  ["ocaml" "setup.ml" "-test"]
+]
+remove: ["ocamlfind" "remove" "ranger"]
+depends: [
+  "ocamlfind" {build}
+  "kaputt" {test}
+  # Only for dev version
+  "oasis" {build}
+]
+
+available: [ocaml-version >= "4.01.0"]

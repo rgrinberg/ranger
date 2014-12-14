@@ -1,45 +1,41 @@
-default: all
+# OASIS_START
+# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
 
-configure:
-	oasis setup
-	ocaml setup.ml -configure --enable-tests
+SETUP = ocaml setup.ml
 
-configure-no-tests:
-	oasis setup
-	ocaml setup.ml -configure
+build: setup.data
+	$(SETUP) -build $(BUILDFLAGS)
 
-build:
-	ocaml setup.ml -build
+doc: setup.data build
+	$(SETUP) -doc $(DOCFLAGS)
+
+test: setup.data build
+	$(SETUP) -test $(TESTFLAGS)
 
 all:
-	ocaml setup.ml -all
+	$(SETUP) -all $(ALLFLAGS)
 
-test: build
-	ocaml setup.ml -test
+install: setup.data
+	$(SETUP) -install $(INSTALLFLAGS)
 
-doc:
-	ocaml setup.ml -doc
+uninstall: setup.data
+	$(SETUP) -uninstall $(UNINSTALLFLAGS)
+
+reinstall: setup.data
+	$(SETUP) -reinstall $(REINSTALLFLAGS)
 
 clean:
-	ocaml setup.ml -clean
+	$(SETUP) -clean $(CLEANFLAGS)
 
-scrub: clean
-	# ocaml setup.ml -distclean
-	rm -rf _tags
-	rm -rf myocamlbuild.ml
-	rm -rf META
-	rm -rf setup.ml
-	rm -rf lib/*.mllib
-	rm -rf lib/*.mlpack
-	rm -rf lib/*.mldylib
+distclean:
+	$(SETUP) -distclean $(DISTCLEANFLAGS)
 
-install:
-	ocaml setup.ml -install
+setup.data:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
 
-uninstall:
-	ocaml setup.ml -uninstall
+configure:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
 
-reinstall:
-	ocaml setup.ml -reinstall
+.PHONY: build doc test all install uninstall reinstall clean distclean configure
 
-.PHONY: build all build default install uninstall
+# OASIS_STOP
