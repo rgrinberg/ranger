@@ -5,6 +5,7 @@ version: "0.0.1"
 maintainer: "rudi.grinberg@gmail.com"
 authors: "Rudi Grinberg"
 license: "MIT"
+
 homepage: "https://github.com/rgrinberg/ranger"
 bug-reports: "https://github.com/rgrinberg/ranger/issues"
 dev-repo: "https://github.com/rgrinberg/ranger.git"
