@@ -1,0 +1,3 @@
+(test
+  (name ranger_test)
+  (libraries ranger kaputt))

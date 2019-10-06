@@ -9,7 +9,6 @@ let arr_gen =
   array (make_int 0 10) (make_int 4 10)
 
 let arr2_gen =
-  let open Gen in
   Gen.zip2 arr_gen arr_gen
 
 let () =
@@ -52,7 +51,7 @@ let () =
   Test.add_simple_test ~title:"takel empty"
     (fun () ->
        let range = R.of_array arr in
-       let zero = R.takel range 0 in
+       let zero = R.takel range ~n:0 in
        Assert.equal_int (List.length (R.to_list zero)) 0;
        Assert.equal_int 0 (R.length zero))
 
@@ -62,7 +61,7 @@ let () =
        let range = R.of_array arr in
        let len  = Array.length arr in
        let take_n = if len = 0 then 0 else (Random.int len) in
-       (R.takel range take_n, take_n, arr))
+       (R.takel range ~n:take_n, take_n, arr))
     [
       Spec.always ==> (fun (taken, l, _) -> (R.length taken) = l);
       Spec.always ==> (fun (range, _, arr) -> (R.get range 0) = arr.(0))
@@ -81,7 +80,7 @@ let () =
        let range = R.of_array arr in
        let len = Array.length arr in
        let take_n = if len = 0 then 0 else (Random.int len) in
-       (R.taker range take_n, take_n, arr))
+       (R.taker range ~n:take_n, take_n, arr))
     [
       Spec.always ==> (fun (taken, l, _) -> (R.length taken) = l);
     ]

@@ -1,11 +1,3 @@
-_build
-setup.data
-setup.log
-*.mldylib
-*.mllib
-*.mlpack
-META
-*.native
-*.byte
-*.docdir
-myocamlbuild.ml
+_build/
+*.merlin
+*.install
