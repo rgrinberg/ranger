@@ -16,10 +16,12 @@ let parse_default ~default = function
 
 let empty = { start=0; stop=0; get=(fun _ -> invalid_arg "Ranger.empty") }
 
+(* unused
 let option_map t ~f =
   match t with
   | None -> None
   | Some x -> Some (f x)
+*)
 
 let create ?(start=0) ~stop get = { start; stop=(parse_num stop); get }
 
@@ -106,8 +108,10 @@ let to_string t =
   (* String.init (length t) t.get *)
   Bytes.unsafe_to_string (to_bytes t)
 
+(* unused
 let to_stream t =
-  Stream.from (fun x -> try Some (get t) with (Invalid_argument _) -> None)
+  Stream.from (fun _ -> try Some (get t) with (Invalid_argument _) -> None)
+*)
 
 let bounds { start; stop; _ } = (start, stop - 1)
 
@@ -155,9 +159,9 @@ let takel_while ({ start; stop; get } as t) ~f =
     { start=stop;stop;get }
   with Found stop -> {t with stop}
 
-let dropr t ~n = rev (dropl (rev t) n)
+let dropr t ~n = rev (dropl (rev t) ~n)
 
-let taker t ~n = rev (takel (rev t) n)
+let taker t ~n = rev (takel (rev t) ~n)
 
 let tl t =
   if t.start + 1 >= t.stop then None
@@ -179,24 +183,26 @@ let findi t ~f =
   try iteri t ~f:(fun i x -> if f x then raise (Found i)); None
   with Found x -> Some (x, get t x)
 
+(* unused
 let find t ~f = option_map (findi t ~f) ~f:snd
+*)
 
-let split_at t ~n = (takel t n, dropl t n)
+let split_at t ~n = (takel t ~n, dropl t ~n)
 
 let splitl t ~f =
   match findi t ~f:(fun x -> not (f x)) with
   | None -> (empty, t)
-  | Some (i, _) -> split_at t i
+  | Some (n, _) -> split_at t ~n
 
 let splitr t ~f =
   match findi (rev t) ~f:(fun x -> not (f x)) with
   | None -> (empty, t)
-  | Some (i, _) -> split_at t i
+  | Some (n, _) -> split_at t ~n
 
 let reduce t ~f =
   if is_empty t then None
   else
-    let (hd, tl) = (hd_exn t, tl_exn t) in
+    let (hd, _) = (hd_exn t, tl_exn t) in
     Some (fold_left t ~init:hd ~f)
 
 let mid t =
